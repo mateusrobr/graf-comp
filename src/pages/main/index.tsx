@@ -17,7 +17,7 @@ export function MainPage() {
         Computação Gráfica - Geração e Processamento de Imagens
       </Typography>
       <Typography variant="body1" textAlign="center" sx={{ mb: 3 }}>
-        Escolha uma das opções abaixo para começar
+        Escolha uma das opções abaixo para começar:
       </Typography>
       <Stack spacing={2} direction="column" alignItems="center">
         <Button
