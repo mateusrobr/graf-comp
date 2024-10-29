@@ -2,6 +2,9 @@
 
 Neste trabalho final da disciplina de Computação Gráfica, foi proposto a criação de uma aplicação que permitisse a geração de figuras em um plano 2D, com a possibilidade de realizar transformações geométricas nessas figuras. A aplicação foi desenvolvida em React, utilizando os algoritmos de rasterização de retas e círculos, e as transformações geométricas de translação, rotação e escala.
 
+![Image processing](https://i.imgur.com/jEktEhb.png)
+![Projection](https://i.imgur.com/5uR98tF.png)
+
 ## Como rodar a aplicação
 
 Para rodar a aplicação, é necessário ter o Node.js instalado. Com o Node.js instalado, basta rodar os seguintes comandos:
