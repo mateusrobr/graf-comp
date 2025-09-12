@@ -1,4 +1,4 @@
-import { Container, Typography, Button, Stack } from "@mui/material";
+import { Container, Typography, Button, Stack, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export function MainPage() {
@@ -9,17 +9,45 @@ export function MainPage() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         minHeight: "100vh",
+        paddingTop: 6,
       }}
     >
-      <Typography textAlign="center" variant="h4" component="h1" gutterBottom>
-        Computação Gráfica - Geração e Processamento de Imagens
-      </Typography>
-      <Typography variant="body1" textAlign="center" sx={{ mb: 3 }}>
-        Escolha uma das opções abaixo para começar:
-      </Typography>
-      <Stack spacing={2} direction="column" alignItems="center">
+      <Box
+        sx={{
+          backgroundColor: "primary.main",
+          padding: 3,
+          borderRadius: 2,
+          width: "100%",
+          textAlign: "center",
+          marginBottom: 4,
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ color: "#fff", marginBottom: 1 }}
+        >
+          Computação Gráfica - Trabalho Prático
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          component="p"
+          sx={{ color: "#fff" }}
+        >
+          Luiz Mateus Pereira da Conceição
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          component="p"
+          sx={{ color: "#fff" }}
+        >
+          Fellipe Machado Castro
+        </Typography>
+      </Box>
+
+      <Stack spacing={2} direction="column" alignItems="center" sx={{ width: "100%" }}>
         <Button
           variant="contained"
           component={Link}

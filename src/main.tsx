@@ -13,16 +13,11 @@ import { MainPage } from "./pages/main";
 
 import { ImageSynthesisPage } from "./pages/image-synthesis";
 import { ImageSynthesisProvider } from "./pages/image-synthesis/contexts/image-synthesis";
-import { ImageProcessingPage } from "./pages/image-processing";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainPage />,
-  },
-  {
-    path: "/image-processing",
-    element: <ImageProcessingPage />,
   },
 
   {

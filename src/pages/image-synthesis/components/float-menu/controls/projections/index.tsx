@@ -10,6 +10,7 @@ import {
   Slider,
   Stack,
   Typography,
+  Paper,
 } from "@mui/material";
 import {
   cavalierProjection,
@@ -41,13 +42,8 @@ export function Projections() {
   ]);
 
   const [controls, setControls] = useState({
-    perspective: {
-      d: 100,
-    },
-    cavalier: {
-      angle: 20,
-      scale: 0.25,
-    },
+    perspective: { d: 100 },
+    cavalier: { angle: 20, scale: 0.25 },
   });
 
   function handleExecute() {
@@ -68,24 +64,22 @@ export function Projections() {
         perspectiveProjection(p, controls.perspective.d)
       );
     }
+
     if (projectionType === "cabinet") {
-    projectedPoints = points3D.map((p) =>
+      projectedPoints = points3D.map((p) =>
         cabinetProjection(p, controls.cavalier.angle)
       );
     }
 
     const edges: [Point, Point][] = [
-      // Frente
       [projectedPoints[0], projectedPoints[1]],
       [projectedPoints[1], projectedPoints[2]],
       [projectedPoints[2], projectedPoints[3]],
       [projectedPoints[3], projectedPoints[0]],
-      // Trás
       [projectedPoints[4], projectedPoints[5]],
       [projectedPoints[5], projectedPoints[6]],
       [projectedPoints[6], projectedPoints[7]],
       [projectedPoints[7], projectedPoints[4]],
-      // Conectando frente e trás
       [projectedPoints[0], projectedPoints[4]],
       [projectedPoints[1], projectedPoints[5]],
       [projectedPoints[2], projectedPoints[6]],
@@ -102,136 +96,157 @@ export function Projections() {
 
   useEffect(() => {
     handleExecute();
-  }, [controls, projectionType]); // Adicionado projectionType às dependências
+  }, [controls, projectionType]);
 
   return (
-    <Stack spacing={2}>
-      <FormControl size="small">
-        <InputLabel htmlFor="projection-type">Tipo de projeção</InputLabel>
-        <Select
-          id="projection-type"
-          name="projection-type"
-          label="Tipo de projeção"
-          value={projectionType}
-          onChange={(e) => setProjectionType(e.target.value as ProjectionTypes)}
-        >
-          {PROJECTION_OPTIONS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <Paper
+      elevation={6}
+      sx={{
+        p: 3,
+        borderRadius: 3,
+        background: "linear-gradient(135deg, #1e293b, #0f172a)",
+        color: "#f1f5f9",
+        fontFamily: "Inter, sans-serif",
+        width: 320,
+      }}
+    >
+      <Stack spacing={3}>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: "#38bdf8" }}>
+          Configurações de Projeção
+        </Typography>
 
-      {projectionType === "perspective" && (
-        <Stack spacing={2}>
-          <Typography>Distância focal</Typography>
-          <Slider
-            value={controls.perspective.d}
-            onChange={(_, value) =>
-              setControls({ ...controls, perspective: { d: value as number } })
-            }
-            min={0}
-            max={400}
-            step={1}
-            valueLabelDisplay="auto"
-            valueLabelFormat={(value) => `${value}u`}
-          />
-        </Stack>
-      )}
+        {/* Tipo de projeção */}
+        <FormControl size="small" fullWidth>
+          <InputLabel sx={{ color: "#38bdf8" }}>Tipo de projeção</InputLabel>
+          <Select
+            value={projectionType}
+            onChange={(e) => setProjectionType(e.target.value as ProjectionTypes)}
+            sx={{
+              bgcolor: "#0f172a",
+              color: "white",
+              borderRadius: 2,
+              "& .MuiSvgIcon-root": { color: "#38bdf8" },
+            }}
+          >
+            {PROJECTION_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-      {projectionType === "oblique" && (
-        <Stack spacing={2}>
-          <Typography>Ângulo</Typography>
-          <Slider
-            value={controls.cavalier.angle}
-            onChange={(_, value) =>
-              setControls({
-                ...controls,
-                cavalier: { ...controls.cavalier, angle: value as number },
-              })
-            }
-            min={0}
-            max={360}
-            step={1}
-            valueLabelDisplay="auto"
-            valueLabelFormat={(value) => `${value}°`}
-          />
-
-          <Typography>Escala</Typography>
-          <Slider
-            value={controls.cavalier.scale}
-            onChange={(_, value) =>
-              setControls({
-                ...controls,
-                cavalier: { ...controls.cavalier, scale: value as number },
-              })
-            }
-            min={0}
-            max={1}
-            step={0.01}
-            valueLabelDisplay="auto"
-            valueLabelFormat={(value) => `${value}`}
-          />
-        </Stack>
-      )}
-
-      {points3D.map((p, i) => (
-        <Stack spacing={2} key={i}>
-          <Typography>Ponto {i + 1}</Typography>
-          <Stack direction="row" spacing={2}>
-            <FormControl size="small">
-              <InputLabel htmlFor={`x-${i}`}>X</InputLabel>
-              <OutlinedInput
-                id={`x-${i}`}
-                name={`x-${i}`}
-                label="X"
-                type="number"
-                value={p.x}
-                onChange={(e) => {
-                  const newPoints = [...points3D];
-                  newPoints[i].x = Number(e.target.value);
-                  setPoints3D(newPoints);
-                }}
-              />
-            </FormControl>
-            <FormControl size="small">
-              <InputLabel htmlFor={`y-${i}`}>Y</InputLabel>
-              <OutlinedInput
-                id={`y-${i}`}
-                name={`y-${i}`}
-                label="Y"
-                type="number"
-                value={p.y}
-                onChange={(e) => {
-                  const newPoints = [...points3D];
-                  newPoints[i].y = Number(e.target.value);
-                  setPoints3D(newPoints);
-                }}
-              />
-            </FormControl>
-            <FormControl size="small">
-              <InputLabel htmlFor={`z-${i}`}>Z</InputLabel>
-              <OutlinedInput
-                id={`z-${i}`}
-                name={`z-${i}`}
-                label="Z"
-                type="number"
-                value={p.z}
-                onChange={(e) => {
-                  const newPoints = [...points3D];
-                  newPoints[i].z = Number(e.target.value);
-                  setPoints3D(newPoints);
-                }}
-              />
-            </FormControl>
+        {/* Perspective controls */}
+        {projectionType === "perspective" && (
+          <Stack spacing={1}>
+            <Typography variant="body2">Distância focal</Typography>
+            <Slider
+              value={controls.perspective.d}
+              onChange={(_, value) =>
+                setControls({ ...controls, perspective: { d: value as number } })
+              }
+              min={0}
+              max={400}
+              step={1}
+              valueLabelDisplay="auto"
+              sx={{ color: "#38bdf8" }}
+            />
           </Stack>
-        </Stack>
-      ))}
+        )}
 
-      <Button variant="contained" onClick={handleExecute}>
-        Projetar
-      </Button>
-    </Stack>
+        {/* Oblique controls */}
+        {projectionType === "oblique" && (
+          <Stack spacing={2}>
+            <div>
+              <Typography variant="body2">Ângulo</Typography>
+              <Slider
+                value={controls.cavalier.angle}
+                onChange={(_, value) =>
+                  setControls({
+                    ...controls,
+                    cavalier: { ...controls.cavalier, angle: value as number },
+                  })
+                }
+                min={0}
+                max={360}
+                step={1}
+                valueLabelDisplay="auto"
+                sx={{ color: "#38bdf8" }}
+              />
+            </div>
+
+            <div>
+              <Typography variant="body2">Escala</Typography>
+              <Slider
+                value={controls.cavalier.scale}
+                onChange={(_, value) =>
+                  setControls({
+                    ...controls,
+                    cavalier: { ...controls.cavalier, scale: value as number },
+                  })
+                }
+                min={0}
+                max={1}
+                step={0.01}
+                valueLabelDisplay="auto"
+                sx={{ color: "#38bdf8" }}
+              />
+            </div>
+          </Stack>
+        )}
+
+        {/* Pontos 3D */}
+        <Stack spacing={2}>
+          <Typography variant="subtitle2" sx={{ color: "#38bdf8" }}>
+            Coordenadas dos pontos
+          </Typography>
+          {points3D.map((p, i) => (
+            <Stack spacing={1} key={i}>
+              <Typography variant="caption">Ponto {i + 1}</Typography>
+              <Stack direction="row" spacing={1}>
+                {["x", "y", "z"].map((axis) => (
+                  <FormControl size="small" key={axis}>
+                    <InputLabel>{axis.toUpperCase()}</InputLabel>
+                    <OutlinedInput
+                      type="number"
+                      value={p[axis as keyof Point3D]}
+                      onChange={(e) => {
+                        const newPoints = [...points3D];
+                        newPoints[i][axis as keyof Point3D] = Number(
+                          e.target.value
+                        );
+                        setPoints3D(newPoints);
+                      }}
+                      sx={{
+                        bgcolor: "#0f172a",
+                        color: "white",
+                        borderRadius: 2,
+                      }}
+                    />
+                  </FormControl>
+                ))}
+              </Stack>
+            </Stack>
+          ))}
+        </Stack>
+
+        {/* Botão */}
+        <Button
+          variant="contained"
+          onClick={handleExecute}
+          sx={{
+            mt: 2,
+            bgcolor: "#38bdf8",
+            color: "black",
+            fontWeight: 600,
+            textTransform: "none",
+            borderRadius: 2,
+            "&:hover": { bgcolor: "#0ea5e9", color: "white" },
+          }}
+        >
+          Projetar
+        </Button>
+      </Stack>
+    </Paper>
   );
 }
