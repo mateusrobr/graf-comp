@@ -23,14 +23,6 @@ export function MainPage() {
         <Button
           variant="contained"
           component={Link}
-          to="/image-processing"
-          sx={{ width: "100%" }}
-        >
-          Processamento de Imagens
-        </Button>
-        <Button
-          variant="contained"
-          component={Link}
           to="/image-synthesis"
           sx={{ width: "100%" }}
         >

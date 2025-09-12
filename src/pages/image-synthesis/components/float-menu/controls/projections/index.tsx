@@ -15,6 +15,7 @@ import {
   cavalierProjection,
   orthographicProjection,
   perspectiveProjection,
+  cabinetProjection,
 } from "./algorithms";
 import { useImageSynthesis } from "@/pages/image-synthesis/hooks/use-image-synthesis";
 import { drawNearestPoints } from "../bresenham/algorithms";
@@ -65,6 +66,11 @@ export function Projections() {
     if (projectionType === "perspective") {
       projectedPoints = points3D.map((p) =>
         perspectiveProjection(p, controls.perspective.d)
+      );
+    }
+    if (projectionType === "cabinet") {
+    projectedPoints = points3D.map((p) =>
+        cabinetProjection(p, controls.cavalier.angle)
       );
     }
 

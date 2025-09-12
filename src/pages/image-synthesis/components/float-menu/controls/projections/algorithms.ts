@@ -55,3 +55,14 @@ export function perspectiveProjection(point: Point3D, d: number = 100): Point {
   const yPrime = (point.y * d) / zAdjusted;
   return { x: Math.round(xPrime), y: Math.round(yPrime) };
 }
+
+
+export function cabinetProjection(
+  point: Point3D,
+  angle: number = 45   // em graus
+): Point {
+  const theta = (angle * Math.PI) / 180;
+  const xPrime = point.x + 0.5 * Math.cos(theta) * point.z;
+  const yPrime = point.y + 0.5 * Math.sin(theta) * point.z;
+  return { x: Math.round(xPrime), y: Math.round(yPrime) };
+}

@@ -11,4 +11,8 @@ export const PROJECTION_OPTIONS = [
     value: "oblique",
     label: "Oblíqua",
   },
+  {
+    value: "cabinet",
+    label: "Cabinet"
+  }
 ];
