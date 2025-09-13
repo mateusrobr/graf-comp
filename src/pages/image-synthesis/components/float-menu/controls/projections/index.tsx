@@ -244,7 +244,7 @@ export function Projections() {
             "&:hover": { bgcolor: "#0ea5e9", color: "white" },
           }}
         >
-          Projetar
+          Desenhar
         </Button>
       </Stack>
     </Paper>

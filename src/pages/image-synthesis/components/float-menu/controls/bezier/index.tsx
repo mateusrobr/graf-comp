@@ -1,5 +1,4 @@
 import { useImageSynthesis } from "@/pages/image-synthesis/hooks/use-image-synthesis";
-
 import {
   Button,
   FormControl,
@@ -7,6 +6,8 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
+  Slider,
+  Typography,
 } from "@mui/material";
 import { drawBezierCurve } from "./algorithms";
 import { useState } from "react";
@@ -14,40 +15,52 @@ import { useState } from "react";
 export function BezierCurves() {
   const { points, setPoints } = useImageSynthesis();
   const [numSteps, setNumSteps] = useState(200);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   function handleExecute() {
     if (points.length < 3) return;
-
-    const newP = drawBezierCurve(points, numSteps);
-
-    setPoints(newP);
+    setIsProcessing(true);
+    setTimeout(() => {
+      setPoints(drawBezierCurve(points, numSteps));
+      setIsProcessing(false);
+    }, 50);
   }
 
   return (
-    <Stack spacing={2}>
-      <FormControl size="small">
-        <InputLabel htmlFor="steps">Número de passos</InputLabel>
+    <Stack spacing={3} sx={{ maxWidth: 400, margin: "auto", p: 2 }}>
+      <FormControl fullWidth size="small">
+        <InputLabel htmlFor="steps">Precisão da curva</InputLabel>
         <OutlinedInput
           id="steps"
-          name="steps"
-          label="Número de passos"
           type="number"
-          inputProps={{ min: 1 }}
           value={numSteps}
-          onChange={(e) => setNumSteps(Number(e.target.value))}
+          onChange={(e) => setNumSteps(Math.max(1, Number(e.target.value)))}
+          inputProps={{ min: 1 }}
+          label="Número de passos"
         />
         <FormHelperText>
-          Define a quantidade de pontos calculados ao longo da curva
+          Número de pontos usados para desenhar a curva
         </FormHelperText>
       </FormControl>
 
+      <Typography gutterBottom>
+        Ajuste visual dos passos
+      </Typography>
+      <Slider
+        value={numSteps}
+        min={1}
+        max={1000}
+        onChange={(_, value) => setNumSteps(value as number)}
+        valueLabelDisplay="auto"
+      />
+
       <Button
         variant="contained"
-        color="primary"
+        color={isProcessing ? "secondary" : "primary"}
         onClick={handleExecute}
-        disabled={points.length < 3}
+        disabled={points.length < 3 || isProcessing}
       >
-        Executar
+        {isProcessing ? "Processando..." : "Executar"}
       </Button>
     </Stack>
   );

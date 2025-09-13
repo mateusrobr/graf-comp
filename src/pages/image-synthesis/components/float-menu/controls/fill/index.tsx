@@ -19,8 +19,7 @@ import { Point } from "../../../canvas/types";
 export function Fill() {
   const { points, setPoints } = useImageSynthesis();
   const [isConcatenated, setIsConcatenated] = useState(false);
-  const [fillingType, setFillingType] =
-    useState<FillAlgorithmType>("recursive");
+  const [fillingType, setFillingType] = useState<FillAlgorithmType>("recursive");
   const polygonPoints = useRef<Point[]>([]);
 
   function handleStorePolygonPoints() {
@@ -34,8 +33,7 @@ export function Fill() {
       return;
     }
 
-    const fillFunction =
-      fillingType === "recursive" ? drawRecursiveFill : drawScanlineFill;
+    const fillFunction = fillingType === "recursive" ? drawRecursiveFill : drawScanlineFill;
 
     const lastPoint = points[points.length - 1];
     const boundaryPoints = polygonPoints.current;
@@ -49,20 +47,14 @@ export function Fill() {
   }, [points, setPoints, isConcatenated, fillingType]);
 
   return (
-    <Stack spacing={2}>
-      <FormControl size="small">
-        <InputLabel htmlFor="fill-algorithm">
-          Escolha o tipo de preenchimento
-        </InputLabel>
+    <Stack spacing={3} sx={{ maxWidth: 400, margin: "auto", p: 2 }}>
+      <FormControl fullWidth size="small">
+        <InputLabel htmlFor="fill-algorithm">Tipo de preenchimento</InputLabel>
         <Select
           id="fill-algorithm"
           name="fill-algorithm"
-          label="Escolha o tipo de preenchimento"
-          defaultValue="bresenham"
           value={fillingType}
-          onChange={(e) => {
-            setFillingType(e.target.value as FillAlgorithmType);
-          }}
+          onChange={(e) => setFillingType(e.target.value as FillAlgorithmType)}
         >
           {FILL_ALGORITHM_OPTIONS.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -73,9 +65,9 @@ export function Fill() {
       </FormControl>
 
       {!polygonPoints.current.length && (
-        <>
+        <Stack spacing={2}>
           <Alert severity="info">
-            Crie um polígono marcando os vértices e depois clique em prosseguir.
+            Crie um polígono marcando pelo menos 3 vértices e depois clique em prosseguir.
           </Alert>
 
           <Button
@@ -85,15 +77,15 @@ export function Fill() {
           >
             Prosseguir
           </Button>
-        </>
+        </Stack>
       )}
 
       {!!polygonPoints.current.length && (
-        <>
+        <Stack spacing={2}>
           <Alert severity="info">
-            Agora clique em um ponto dentro do polígono para iniciar o
-            preenchimento.
+            Clique em um ponto dentro do polígono para iniciar o preenchimento.
           </Alert>
+
           <FormControlLabel
             control={
               <Checkbox
@@ -103,7 +95,7 @@ export function Fill() {
             }
             label="Concatenar preenchimentos"
           />
-        </>
+        </Stack>
       )}
     </Stack>
   );

@@ -1,4 +1,4 @@
-import { useImageSynthesis } from "@/pages/image-synthesis/hooks/use-image-synthesis";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -8,8 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-
+import { useImageSynthesis } from "@/pages/image-synthesis/hooks/use-image-synthesis";
 import { drawNearestPoints } from "../bresenham/algorithms";
 import { sutherlandHodgmanClip } from "./algorithms";
 
@@ -28,7 +27,7 @@ export function PolygonCropWindow() {
     const halfHeight = height / 2;
     const halfWidth = width / 2;
 
-    const points = drawNearestPoints([
+    const cropPoints = drawNearestPoints([
       { x: Math.round(x - halfWidth), y: Math.round(y - halfHeight) },
       { x: Math.round(x + halfWidth), y: Math.round(y - halfHeight) },
       { x: Math.round(x + halfWidth), y: Math.round(y + halfHeight) },
@@ -36,11 +35,13 @@ export function PolygonCropWindow() {
       { x: Math.round(x - halfWidth), y: Math.round(y - halfHeight) },
     ]);
 
-    setCropWindowPoints(points.map((p) => ({ ...p, color: "red" })));
+    setCropWindowPoints(cropPoints.map((p) => ({ ...p, color: "red" })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controls]);
 
   function handleExecute() {
+    if (points.length < 3) return;
+
     const newPoints = sutherlandHodgmanClip(points, {
       min: {
         x: controls.x - controls.width / 2 + 1,
@@ -61,44 +62,43 @@ export function PolygonCropWindow() {
   }
 
   return (
-    <Stack spacing={2}>
-      <Typography>Janela de corte</Typography>
+    <Stack spacing={3} sx={{ maxWidth: 400, margin: "auto", p: 2 }}>
+      <Typography variant="h6">Janela de corte</Typography>
+
       <Stack direction="row" spacing={2}>
-        <FormControl size="small">
+        <FormControl fullWidth size="small">
           <InputLabel htmlFor="height">Altura</InputLabel>
           <OutlinedInput
             id="height"
-            name="height"
-            label="Altura"
             type="number"
+            inputProps={{ min: 1 }}
             value={controls.height}
             onChange={(e) =>
-              setControls((prev) => ({ ...prev, height: +e.target.value }))
+              setControls((prev) => ({ ...prev, height: Math.max(1, +e.target.value) }))
             }
           />
         </FormControl>
-        <FormControl size="small">
+
+        <FormControl fullWidth size="small">
           <InputLabel htmlFor="width">Largura</InputLabel>
           <OutlinedInput
             id="width"
-            name="width"
-            label="Largura"
             type="number"
+            inputProps={{ min: 1 }}
             value={controls.width}
             onChange={(e) =>
-              setControls((prev) => ({ ...prev, width: +e.target.value }))
+              setControls((prev) => ({ ...prev, width: Math.max(1, +e.target.value) }))
             }
           />
         </FormControl>
       </Stack>
-      <Typography>Posição (centro)</Typography>
+
+      <Typography>Posição do centro</Typography>
       <Stack direction="row" spacing={2}>
-        <FormControl size="small">
+        <FormControl fullWidth size="small">
           <InputLabel htmlFor="x">X</InputLabel>
           <OutlinedInput
             id="x"
-            name="x"
-            label="X"
             type="number"
             value={controls.x}
             onChange={(e) =>
@@ -106,12 +106,11 @@ export function PolygonCropWindow() {
             }
           />
         </FormControl>
-        <FormControl size="small">
+
+        <FormControl fullWidth size="small">
           <InputLabel htmlFor="y">Y</InputLabel>
           <OutlinedInput
             id="y"
-            name="y"
-            label="Y"
             type="number"
             value={controls.y}
             onChange={(e) =>
@@ -120,10 +119,16 @@ export function PolygonCropWindow() {
           />
         </FormControl>
       </Stack>
+
       <Alert severity="info">
-        Marque os vértices para formar a figura que será recortada.
+        Marque os vértices do polígono que será recortado.
       </Alert>
-      <Button variant="contained" onClick={handleExecute}>
+
+      <Button
+        variant="contained"
+        onClick={handleExecute}
+        disabled={points.length < 3}
+      >
         Executar
       </Button>
     </Stack>

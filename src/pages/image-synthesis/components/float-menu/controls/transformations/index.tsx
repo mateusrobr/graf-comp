@@ -85,7 +85,7 @@ export function Transformations() {
   }, [points]);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3} sx={{ maxWidth: 450, margin: "auto", p: 2 }}>
       {!originalVertices.length ? (
         <>
           <Alert severity="info">
@@ -102,192 +102,173 @@ export function Transformations() {
         </>
       ) : (
         <>
-          <Typography>Rotação</Typography>
-          <FormControl size="small">
-            <InputLabel htmlFor="rotation">
-              Ângulo de rotação (graus)
-            </InputLabel>
+          <Typography variant="h6">Rotação</Typography>
+          <FormControl fullWidth size="small">
+            <InputLabel htmlFor="rotation">Ângulo de rotação (°)</InputLabel>
             <OutlinedInput
               id="rotation"
               type="number"
-              label="Ângulo de rotação (graus)"
-              value={controls.rotation.angle}
               inputProps={{ min: 0, max: 360 }}
-              onChange={(e) => {
-                const angle = Number(e.target.value);
+              value={controls.rotation.angle}
+              onChange={(e) =>
                 setControls((prev) => ({
                   ...prev,
-                  rotation: { ...prev.rotation, angle },
-                }));
-              }}
+                  rotation: { ...prev.rotation, angle: Number(e.target.value) },
+                }))
+              }
             />
           </FormControl>
 
           <Stack direction="row" spacing={2}>
-            <FormControl size="small">
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="pivotX">Pivô X</InputLabel>
               <OutlinedInput
                 id="pivotX"
                 type="number"
-                label="Pivô X"
-                value={controls.rotation.fixPoint.x}
                 inputProps={{ min: 0 }}
-                onChange={(e) => {
-                  const x = Number(e.target.value);
+                value={controls.rotation.fixPoint.x}
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
                     rotation: {
                       ...prev.rotation,
-                      fixPoint: { ...prev.rotation.fixPoint, x },
+                      fixPoint: { ...prev.rotation.fixPoint, x: Number(e.target.value) },
                     },
-                  }));
-                }}
+                  }))
+                }
               />
             </FormControl>
-            <FormControl size="small">
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="pivotY">Pivô Y</InputLabel>
               <OutlinedInput
                 id="pivotY"
                 type="number"
-                label="Pivô Y"
-                value={controls.rotation.fixPoint.y}
                 inputProps={{ min: 0 }}
-                onChange={(e) => {
-                  const y = Number(e.target.value);
+                value={controls.rotation.fixPoint.y}
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
                     rotation: {
                       ...prev.rotation,
-                      fixPoint: { ...prev.rotation.fixPoint, y },
+                      fixPoint: { ...prev.rotation.fixPoint, y: Number(e.target.value) },
                     },
-                  }));
-                }}
+                  }))
+                }
               />
             </FormControl>
           </Stack>
 
-          <Typography color="info" fontSize={14}>
-            Posicione o ponto azul no gráfico
+          <Typography color="info.main" fontSize={14}>
+            Ponto azul indica pivô de rotação
           </Typography>
 
-          <Typography>Translação</Typography>
+          <Typography variant="h6">Translação</Typography>
           <Stack direction="row" spacing={2}>
-            <FormControl size="small" fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="translationX">X</InputLabel>
               <OutlinedInput
                 id="translationX"
                 type="number"
-                label="X"
                 value={controls.translation.x}
-                onChange={(e) => {
-                  const x = Number(e.target.value);
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
-                    translation: { ...prev.translation, x },
-                  }));
-                }}
+                    translation: { ...prev.translation, x: Number(e.target.value) },
+                  }))
+                }
               />
             </FormControl>
-            <FormControl size="small" fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="translationY">Y</InputLabel>
               <OutlinedInput
                 id="translationY"
                 type="number"
-                label="Y"
                 value={controls.translation.y}
-                onChange={(e) => {
-                  const y = Number(e.target.value);
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
-                    translation: { ...prev.translation, y },
-                  }));
-                }}
+                    translation: { ...prev.translation, y: Number(e.target.value) },
+                  }))
+                }
               />
             </FormControl>
           </Stack>
 
-          <Typography>Escala</Typography>
+          <Typography variant="h6">Escala</Typography>
           <Stack direction="row" spacing={2}>
-            <FormControl size="small" fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="scaleX">X (%)</InputLabel>
               <OutlinedInput
                 id="scaleX"
                 type="number"
-                label="X (%)"
-                value={controls.scale.x}
                 inputProps={{ min: 0, max: 200 }}
-                onChange={(e) => {
-                  const x = Number(e.target.value);
+                value={controls.scale.x}
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
-                    scale: { ...prev.scale, x },
-                  }));
-                }}
+                    scale: { ...prev.scale, x: Number(e.target.value) },
+                  }))
+                }
               />
             </FormControl>
-            <FormControl size="small" fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel htmlFor="scaleY">Y (%)</InputLabel>
               <OutlinedInput
                 id="scaleY"
                 type="number"
-                label="Y (%)"
-                value={controls.scale.y}
                 inputProps={{ min: 0, max: 200 }}
-                onChange={(e) => {
-                  const y = Number(e.target.value);
+                value={controls.scale.y}
+                onChange={(e) =>
                   setControls((prev) => ({
                     ...prev,
-                    scale: { ...prev.scale, y },
-                  }));
-                }}
-              />
-            </FormControl>
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <FormControl size="small" fullWidth>
-              <InputLabel htmlFor="fixPointX">Ponto fixo X</InputLabel>
-              <OutlinedInput
-                id="fixPointX"
-                type="number"
-                label="Ponto fixo X"
-                value={controls.scale.fixPoint.x}
-                inputProps={{ min: 0, max: 360 }}
-                onChange={(e) => {
-                  const x = Number(e.target.value);
-                  setControls((prev) => ({
-                    ...prev,
-                    scale: {
-                      ...prev.scale,
-                      fixPoint: { ...prev.scale.fixPoint, x },
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel htmlFor="fixPointY">Ponto fixo Y</InputLabel>
-              <OutlinedInput
-                id="fixPointY"
-                type="number"
-                label="Ponto fixo Y"
-                value={controls.scale.fixPoint.y}
-                inputProps={{ min: 0, max: 360 }}
-                onChange={(e) => {
-                  const y = Number(e.target.value);
-                  setControls((prev) => ({
-                    ...prev,
-                    scale: {
-                      ...prev.scale,
-                      fixPoint: { ...prev.scale.fixPoint, y },
-                    },
-                  }));
-                }}
+                    scale: { ...prev.scale, y: Number(e.target.value) },
+                  }))
+                }
               />
             </FormControl>
           </Stack>
 
-          <Typography color="error" fontSize={14}>
-            Posicione o ponto vermelho no gráfico
+          <Stack direction="row" spacing={2}>
+            <FormControl fullWidth size="small">
+              <InputLabel htmlFor="fixPointX">Ponto fixo X</InputLabel>
+              <OutlinedInput
+                id="fixPointX"
+                type="number"
+                inputProps={{ min: 0, max: 360 }}
+                value={controls.scale.fixPoint.x}
+                onChange={(e) =>
+                  setControls((prev) => ({
+                    ...prev,
+                    scale: {
+                      ...prev.scale,
+                      fixPoint: { ...prev.scale.fixPoint, x: Number(e.target.value) },
+                    },
+                  }))
+                }
+              />
+            </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel htmlFor="fixPointY">Ponto fixo Y</InputLabel>
+              <OutlinedInput
+                id="fixPointY"
+                type="number"
+                inputProps={{ min: 0, max: 360 }}
+                value={controls.scale.fixPoint.y}
+                onChange={(e) =>
+                  setControls((prev) => ({
+                    ...prev,
+                    scale: {
+                      ...prev.scale,
+                      fixPoint: { ...prev.scale.fixPoint, y: Number(e.target.value) },
+                    },
+                  }))
+                }
+              />
+            </FormControl>
+          </Stack>
+
+          <Typography color="error.main" fontSize={14}>
+            Ponto vermelho indica pivô de escala
           </Typography>
         </>
       )}

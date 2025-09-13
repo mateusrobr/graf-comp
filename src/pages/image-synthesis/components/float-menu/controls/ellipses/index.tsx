@@ -18,11 +18,17 @@ export function Ellipses() {
   const [radiusX, setRadiusX] = useState(10);
   const [radiusY, setRadiusY] = useState(5);
   const [autoDraw, setAutoDraw] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const centerPoint = points[0] || { x: 0, y: 0 };
 
   function handleExecute() {
-    setPoints([centerPoint, ...drawEllipse(centerPoint, radiusX, radiusY)]);
+    if (!centerPoint) return;
+    setIsProcessing(true);
+    setTimeout(() => {
+      setPoints([centerPoint, ...drawEllipse(centerPoint, radiusX, radiusY)]);
+      setIsProcessing(false);
+    }, 50); // pequeno delay para feedback visual
   }
 
   useEffect(() => {
@@ -33,69 +39,61 @@ export function Ellipses() {
   }, [autoDraw, centerPoint, radiusX, radiusY]);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3} sx={{ maxWidth: 400, margin: "auto", p: 2 }}>
       <Stack direction="row" spacing={2}>
-        <FormControl size="small">
-          <InputLabel htmlFor="radius">Raio horizontal</InputLabel>
+        <FormControl fullWidth size="small">
+          <InputLabel htmlFor="radiusX">Raio horizontal</InputLabel>
           <OutlinedInput
-            id="radius"
-            name="radius"
-            inputProps={{ min: 1 }}
+            id="radiusX"
             label="Raio horizontal"
             type="number"
+            inputProps={{ min: 1 }}
             value={radiusX}
-            onChange={(e) => setRadiusX(Number(e.target.value))}
+            onChange={(e) => setRadiusX(Math.max(1, Number(e.target.value)))}
           />
         </FormControl>
-        <FormControl size="small">
-          <InputLabel htmlFor="radius">Raio vertical</InputLabel>
+
+        <FormControl fullWidth size="small">
+          <InputLabel htmlFor="radiusY">Raio vertical</InputLabel>
           <OutlinedInput
-            id="radius"
-            name="radius"
-            inputProps={{ min: 1 }}
+            id="radiusY"
             label="Raio vertical"
             type="number"
+            inputProps={{ min: 1 }}
             value={radiusY}
-            onChange={(e) => setRadiusY(Number(e.target.value))}
+            onChange={(e) => setRadiusY(Math.max(1, Number(e.target.value)))}
           />
         </FormControl>
       </Stack>
+
       <Stack direction="row" spacing={2}>
         <FormControl size="small">
-          <InputLabel htmlFor="radius">X</InputLabel>
-          <OutlinedInput
-            id="x"
-            name="x"
-            label="X"
-            type="number"
-            value={centerPoint.x}
-            disabled
-          />
+          <InputLabel htmlFor="x">X</InputLabel>
+          <OutlinedInput id="x" label="X" type="number" value={centerPoint.x} disabled />
         </FormControl>
+
         <FormControl size="small">
-          <InputLabel htmlFor="radius">Y</InputLabel>
-          <OutlinedInput
-            id="y"
-            name="y"
-            label="Y"
-            type="number"
-            disabled
-            value={centerPoint.y}
-          />
+          <InputLabel htmlFor="y">Y</InputLabel>
+          <OutlinedInput id="y" label="Y" type="number" value={centerPoint.y} disabled />
         </FormControl>
       </Stack>
 
       <Typography color="textSecondary" fontSize="0.875rem">
-        Escolha um ponto para o centro da elipse.
+        Selecione um ponto para o centro da elipse ou use o primeiro ponto existente.
       </Typography>
 
       <FormControlLabel
-        control={<Checkbox onChange={(e) => setAutoDraw(e.target.checked)} />}
+        control={<Checkbox checked={autoDraw} onChange={(e) => setAutoDraw(e.target.checked)} />}
         label="Desenhar automaticamente"
       />
 
-      <Button variant="contained" onClick={handleExecute}>
-        Executar
+      <Button
+        variant="contained"
+        color={isProcessing ? "secondary" : "primary"}
+        onClick={handleExecute}
+        disabled={isProcessing}
+      >
+        {isProcessing ? "Desenhando…" : "Executar"}
       </Button>
     </Stack>
   );
